@@ -207,9 +207,9 @@
 				<section>
 					<h2>DockerFile</h2>
 					<p class="left">
-						FROM mcr.microsoft.com/mssql/server:2022-latest
-						USER root
-						ENV ACCEPT_EULA=Y
+						FROM mcr.microsoft.com/mssql/server:2022-latest<br />
+						USER root<br />
+						ENV ACCEPT_EULA=Y<br />
 						ENV SA_PASSWORD=Password1
 					</p>
 				</section>
@@ -414,6 +414,18 @@
 						ALTER ROLE db_owner ADD MEMBER dbo_indycode<br />
 						GO
 					</small></p>
+				</section>
+				<section>
+					<h1>Any Questions?</h1>
+				</section>
+				<section>
+					<h2>Recap</h2>
+					<ul>
+						<li>Docker for MSSQL</li>
+						<li>Dockerfile to set up the image</li>
+						<li>Shell scripts allow us to initialize database</li>
+						<li>Can run SQL from command line (Shell Script)</li>
+					</ul>
 				</section>
 				<section>
 					<img src="./images/SpeakerEvaluationGraphic.PNG">
