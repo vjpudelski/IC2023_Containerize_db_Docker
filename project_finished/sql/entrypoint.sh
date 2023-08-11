@@ -1,0 +1,3 @@
+# start SQL Server
+echo starting SQL Server...
+./dbinit.sh & exec /opt/mssql/bin/sqlservr

@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<style>
+			img {
+				border-radius: 35px;
+				box-shadow: 6px 20px 25px #FFFFFF;
+			}
+			.container{
+					display: flex;
+			}
+			.col{
+					flex: 1;
+			}
+			h5 {
+				font-size: smaller;
+			}
+
+			ul li {
+				font-size: smaller;
+			}
+			ul.no-bullets {
+				list-style: none;
+			}
+			li code {
+				font-size: smaller;
+			}
+
+			.text-bold {
+				font-weight: bold;
+				color: #f0db4f;
+			}
+
+			.color1 {
+				color: #f0db4f !important;
+			}
+			.color2 {
+				color: #61dbfb !important;
+			}
+			.color3 {
+				color: #42b883 !important;
+			}
+
+			.left {
+				text-align: left;
+			}
+			.tiny {
+				font-size: .5em;
+			}
+		</style>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1 class="r-fit-text">Containerizing your Development DB with Docker</h1>
+					<small>&copy; 2023 - A GitFetchVictor Production</small>
+				</section>
+				<section>
+					<h2>Victor J. Pudelski</h2>
+					<h5>
+						V.P. of Development - ZubiSoft, LLC <br />
+						Founder/Developer - Next Link Software, LLC <br />
+						V.P. of Technology - Technology Solutions Consultants
+					</h5>
+					<div class="container">
+						<small>
+							<div class="col">
+								<ul>
+									<li>Developer since 1999</li>
+									<li>C# since 1.0</li>
+									<li>Still make Console Apps</li>
+									<li>4 years Docker for Dev</li>
+								</ul>
+								<p>A couple fun facts</p>
+								<ul>
+									<li>I live near Cleveland, OH</li>
+									<li>This is my 3rd IndyCode</li>
+									<li>I still play amateur baseball</li>
+									<li>I coach Girls Fastpitch</li>
+								</ul>
+							</div>
+						</small>
+						<div class="col">
+							<img src="./images/photo.png" />
+						</div>
+					</div>
+				</section>
+				<section>
+					<h2>Description</h2>
+					<small>
+						<p>
+							In the beginning stages of a project and sometimes longer, it is nice to have a local copy of the database. 
+							This copy can be tweaked, updated, deleted and reloaded on a moment's notice without affecting the workflow 
+							of any other developers. In this session we will focus on solving this problem with Docker and using the 
+							MSSQL container provided by Microsoft as our base. The session will also go over using Docker Compose, 
+							creating shell scripts and sql scripts to create and load the database and a general workflow that could be 
+							followed.
+						</p>
+					</small>
+				</section>
+				<section>
+					<h2>Translation</h2>
+					<small>
+						<div>
+							<ul>
+								<li>What is Docker?</li>
+								<li>Microsoft SQL Server Docker Image</li>
+								<li>Running SQL Statements against Docker Image</li>
+								<li>Tips, Tricks and Insights...</li>
+							</ul>
+						</div>
+					</small>
+				</section>
+				<section>
+					<h2>What is a Container?</h2>
+					<small>
+						<p>
+							A container is an isolated environment for your code. This means that a container has no knowledge of your 
+							operating system, or your files. It runs on the environment provided to you by Docker Desktop. This is why 
+							a container usually has everything that your code needs in order to run, down to a base operating system. 
+							You can use Docker Desktop to manage and explore your containers.
+						</p>
+						<p><a href="https://docs.docker.com/get-started/what-is-a-container/">https://docs.docker.com/get-started/what-is-a-container/</a></p>
+					</small>
+				</section>
+				<section>
+					<h2>Overview of Docker</h2>
+					<small>
+						<p>
+							Docker is an open platform for developing, shipping, and running applications. Docker enables you to separate 
+							your applications from your infrastructure so you can deliver software quickly. With Docker, you can manage 
+							your infrastructure in the same ways you manage your applications. By taking advantage of Docker’s methodologies 
+							for shipping, testing, and deploying code quickly, you can significantly reduce the delay between writing code
+							and running it in production.
+						</p>
+						<p><a href="https://docs.docker.com/get-started/overview/">https://docs.docker.com/get-started/overview/</a></p>
+					</small>
+				</section>
+				<section>
+					<h2>Our Focus with Docker</h2>
+					<small>
+						<p>
+							Your developers write code locally and share their work with their colleagues using Docker containers.
+						</p>
+						<p><a href="https://docs.docker.com/get-started/overview/">https://docs.docker.com/get-started/overview/</a></p>
+					</small>
+				</section>
+				<section>
+					<h2>What I am saying is ...</h2>
+					<small>
+						<p>
+							We can create a Docker container for our development database. We can use SQL to initialize the database 
+							with sample data for our purposes and then share this with other developers who can easily run their 
+							own copy of the container locally on their machine. Developers will have local copies of the database and 
+							don't have to worry about doing anything to affect another developer since they will connect to their own 
+							copy of the database.
+						</p>
+					</small>
+				</section>
+				<section>
+					<h2>Creating a Docker Container in the Console</h2>
+					<small>
+						<p>
+							docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=yourStrong(!)Password" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-latest
+						</p>
+					</small>
+				</section>
+				<section>
+					<h2>Disclaimer for Mac Users</h2>
+					<small>
+						<ul>
+							<li>New Mac hardware is not Intel or AMD</li>
+							<li>Docker containers, VMs and more will not run without help</li>
+							<li>You can install Rosetta to solve this issue</li>
+							<li>https://support.apple.com/en-us/HT211861</li>
+						</ul>
+					</small>
+				</section>
+				<section>
+					<h2>Congratulations You have a Database!</h2>
+					<small>
+						<p>
+							Connect using your favorite tool!
+						</p>
+					</small>
+				</section>
+				<section>
+					<h2>Connect and Run SQL scripts</h2>
+					<p>
+						The database is created and we can do anything we want to the database 
+						including running SQL scripts. 
+					</p>
+				</section>
+				<section>
+					<h2>DockerFile</h2>
+					<p class="left">
+						FROM mcr.microsoft.com/mssql/server:2022-latest
+						USER root
+						ENV ACCEPT_EULA=Y
+						ENV SA_PASSWORD=Password1
+					</p>
+				</section>
+				<section>
+					<h2>Running a Docker File</h2>
+					<ul>
+						<li>
+							Build the Docker Image<br />
+							<code>docker build --tag 'image_name' .</code>
+						</li>
+						<li>
+							Create Docker container using the image<br />
+							<code>docker run --name 'container_name' --detach 'image_name'</code>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Initializing the Database</h2>
+					<p>
+						At the point we are using a Dockerfile we can initialize the database 
+						using the Dockerfile. We can add a command to run the SQL script on 
+						the newly created container. We just need to make sure we copy the files 
+						to the created container. 
+					</p>
+				</section>
+				<section>
+					<h2>DockerFile</h2>
+					<p class="left">
+						FROM mcr.microsoft.com/mssql/server:2022-latest<br />
+						USER root<br />
+						ENV ACCEPT_EULA=Y<br />
+						ENV SA_PASSWORD=Password1<br /><br />
+
+						COPY / ./<br /><br />
+						
+						RUN chmod +x dbinit.sh<br /><br />
+
+						CMD exec /bin/bash ./entrypoint.sh
+												
+					</p>
+				</section>
+				<section>
+					<h2>What's with the .sh files?</h2>
+					<snall>
+						<ul>
+							<li>entrypoint.sh - shell file to start SQL and initialize db</li>
+							<li>dbinit.sh - run sql statements to create db, load data, etc.</li>
+						</ul>
+					</snall>
+				</section>
+				<section>
+					<h2>entrypoint.sh</h2>
+					<p class="left">
+						# start SQL Server<br />
+						echo starting SQL Server...<br />
+						./dbinit.sh & exec /opt/mssql/bin/sqlservr
+					</p>
+				</section>
+				<section>
+					<h2>dbinit.sh</h2>
+					<p class="left tiny">
+						echo "db initialize"<br />
+						IS_STARTED="IS_STARTED_PLACEHOLDER"<br />
+						if [ ! -e $IS_STARTED ]; then<br />
+						&emsp;touch $IS_STARTED<br />
+						&emsp;#!/bin/bash<br />
+						&emsp;wait_time=30s<br />
+						&emsp;password=Password1<br /><br />
+						
+						&emsp;# wait for SQL Server to come up<br />
+						&emsp; echo "database initialization will start in $wait_time..."<br />
+						&emsp;sleep $wait_time<br /><br />
+						
+						&emsp;# run the init script to create the DB and the tables<br />
+						&emsp;echo "creating database..."<br />
+						&emsp;/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $password -i ./createdb.sql<br /><br />
+						
+						&emsp;echo database initialization complete...<br />
+						else<br />
+						&emsp;echo "No Initialization Required!"<br />
+						fi						
+					</p>
+				</section>
+				<section>
+					<h2>Running our Dockerfile</h2>
+					<p class="left tiny">
+						build the image<br />
+						<code>docker build --tag 'indycode2023' ./sql/</code><br />
+						create the container<br />
+						<code>docker run -p 1433:1433 --name 'indycode' --detach 'indycode2023'</code>
+					</p>
+				</section>
+				<section>
+					<h2>Docker Compose</h2>
+					<p>
+						Compose is a tool for defining and running multi-container Docker applications. 
+						With Compose, you use a YAML file to configure your application’s services. 
+						Then, with a single command, you create and start all the services from your 
+						configuration.
+					</p>
+				</section>
+				<section>
+					<h2>docker-compose.yml</h2>
+					<p class="left">
+						version: "3.3"<br />
+						services:<br />
+						&emsp;db:<br />
+						&emsp;&emsp;build:<br />
+						&emsp;&emsp;&emsp;context: .<br />
+						&emsp;&emsp;&emsp;dockerfile: ./sql/Dockerfile<br />
+						&emsp;&emsp;restart: always<br />
+						&emsp;&emsp;ports:<br />
+						&emsp;&emsp;&emsp;- "1433:1433"<br />
+					</p>
+				</section>
+				<section>
+					<h2>Running Docker-Compose</h2>
+					<p class="left">
+						Build the Image<br />
+						<code>docker compose build</code><br />
+						Can Build and Create container in 1 call<br />
+						<code>docker compose up --detach --build</code>
+					</p>
+				</section>
+				<section>
+					<h2>What does this all mean</h2>
+					<small>
+						<ul>
+							<li>Easily create a database from Docker Image</li>
+							<li>Can store configuration of container in Dockerfile</li>
+							<li>Dockerfile can also be used to run SQL statements</li>
+							<li>Docker-Compose can be used if we need multiple machines</li>
+						</ul>
+					</small>
+				</section>
+				<section>
+					<h2>Tip #1: Name the image</h2>
+					<small>
+						<ul>
+							<li>Docker will assign a default name</li>
+							<li>Providing your own name can bring clarity to multiple containers</li>
+							<li>Descriptive names aways work best</li>
+						</ul>
+					</small>
+				</section>
+				<section>
+					<h2>Tip #2: Set the Port Number</h2>
+					<small>
+						<ul>
+							<li>Default SQL port is 1433</li>
+							<li>If you install SQL Server on base machine you will need new port for container</li>
+							<li>Separate ports for different projects can help orgnaize</li>
+						</ul>
+					</small>
+				</section>
+				<section>
+					<h2>Tip #3: Separate Concerns</h2>
+					<p>
+						Putting everything in a single file can make projects and files unweildy. Creating 
+						new files for different project components adds organization and makes tracking 
+						pieces easier.
+					</p>
+				</section>
+				<section>
+					<h2>Tip #4: Check if Database already initialized</h2>
+					<p class="left">
+						IS_STARTED="IS_STARTED_PLACEHOLDER"<br />
+						if [ ! -e $IS_STARTED ]; then<br />
+						&emsp;touch $IS_STARTED
+					</p>
+					<p><small>
+						This was in the dbinit.sh and prevents the createdb from being run if the container
+						already ran the file once. Otherwise, running our sql file every time may result 
+						in previous data being deleted or overwritten. 
+					</small></p>
+				</section>
+				<section>
+					<h2>Tip #5: Create Database, User, etc in SQL</h2>
+					<p class="left tiny"><small>
+						USE master;<br />
+						IF db_id('indy_myapp') IS NOT NULL<br />
+						&emsp;DROP DATABASE indy_myapp;<br />
+						GO<br /><br />
+
+						CREATE DATABASE indy_myapp;<br />
+						GO<br /><br />
+
+						IF NOT EXISTS(SELECT name FROM sys.server_principals WHERE name = 'dbo_indycode')<br />
+						BEGIN<br />
+						&emsp;CREATE LOGIN [dbo_indycode] WITH PASSWORD = N'IndyC0d3'<br /><br />
+
+						&emsp;ALTER LOGIN [dbo_indycode] ENABLE<br />
+						END<br />
+						GO<br /><br />
+
+						USE indy_myapp;<br />
+						GO<br /><br />
+
+						CREATE USER dbo_indycode FOR LOGIN dbo_indycode WITH DEFAULT_SCHEMA = [DBO]<br />
+						GO<br /><br />
+
+						ALTER ROLE db_owner ADD MEMBER dbo_indycode<br />
+						GO
+					</small></p>
+				</section>
+				<section>
+					<img src="./images/SpeakerEvaluationGraphic.PNG">
+				</section>
+				<section>
+					<h1>THANK YOU!</h1>
+					<h2>Any Questions?</h2>
+					<hr/>
+					<h4>Victor J. Pudelski</h4>
+					<small>
+						<span class="fa fa-envelope"></span> vjpudelski@gmail.com<br />
+						<span class="fab fa-twitter"></span> @vjpudelski<br />
+						<span class="fa fa-globe"></span> gitfetchvictor.com<br />
+						<span class="fa-brands fa-github"></span> https://github.com/vjpudelski/IC2023_Containerize_DB_Docker
+					</small>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
